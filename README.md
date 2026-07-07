@@ -11,8 +11,6 @@ Interaktive 3D-Visualisierung einer realen Brauanlage (6 Kühltanks + 1 Braukess
 
 > Chrome / Edge / Safari (WebGL 2 + WebXR für AR). Für den AR-Modus wird ein mobiles Gerät mit Kamera empfohlen.
 
-![Übersicht](docs/screenshots/overview.png)
-
 ---
 
 ## 1) Welche Daten werden visualisiert? (+ Quelle)
@@ -117,8 +115,6 @@ BRAUEREI:KESSEL:1
 ```
 
 Damit lässt sich vor Ort ohne Panel-Bedienung sofort ablesen, was der jeweilige Tank tut – ideal für Rundgänge und Wartung.
-
-![AR-Modus](docs/screenshots/ar-mode.png)
 
 ---
 
