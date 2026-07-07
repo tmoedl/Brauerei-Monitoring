@@ -19,7 +19,7 @@ define('AUTH_ENABLED', true);
 // Standard-Passwort. Beim ersten Login wird hieraus automatisch
 // ein bcrypt-Hash erzeugt und in '.pwhash' abgelegt. Diese Konstante
 // dient nur als Initial-Wert und kann danach gefahrlos entfernt werden.
-define('DEFAULT_PASSWORD', 'IV2026');
+define('DEFAULT_PASSWORD', '***');
 
 // Pfad für den persistierten bcrypt-Hash (ausserhalb der Auslieferung
 // erreichbar, da kein Direkt-URL-Mapping). Falls Sie auf Shared
@@ -35,10 +35,10 @@ define('SESSION_IDLE_TIMEOUT', 60 * 60 * 4); // 4 h
 // ------------------------------------------------------------------
 // Datenbank-Zugang (übernommen aus dem Bestand)
 // ------------------------------------------------------------------
-define('DB_HOST', '10.35.46.44');
-define('DB_NAME', 'k86629_bier');
-define('DB_USER', 'k86629_bier');
-define('DB_PASS', '%U=;8h].y_0:6[EW');
+define('DB_HOST', '***);
+define('DB_NAME', '***');
+define('DB_USER', '***');
+define('DB_PASS', '***');
 
 // ------------------------------------------------------------------
 // Anwendungs-Settings
