@@ -1,0 +1,10 @@
+# Lokale Konfiguration / Secrets (siehe app/config.example.php)
+app/config.php
+app/.pwhash
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,28 @@
+﻿Kategorie,Kennzahl,Wert,Einheit,Interpretation
+Aufnahme,Dauer,528,s,8.8 Minuten
+Aufnahme,Sampling-Rate,1000,Hz,Messpunkte pro Sekunde
+Aufnahme,Nutzbare Videos,1/2,,durch EEG abgedeckt
+Frequenzbänder (Frontal),Delta,11.2,%,langsame Wellen (Schlaf/Artefakte)
+Frequenzbänder (Frontal),Theta,3.9,%,Konzentration oder Müdigkeit
+Frequenzbänder (Frontal),Alpha,25.3,%,Entspannung/Abschweifen
+Frequenzbänder (Frontal),Beta,44.1,%,aktives Denken/Fokus
+Frequenzbänder (Frontal),Gamma,13.6,%,intensive Verarbeitung
+Kennzahlen,Beta/Alpha-Verhältnis,1.75,,HOCH (>1.5): aktiviert
+Kennzahlen,Engagement-Index (Mittel),3.24,,kognitive Einbindung über die Session
+Kennzahlen,Dominantes Band Frontal,Beta,,stärkste Gehirnwelle im Stirnbereich
+Kennzahlen,Dominantes Band Okzipital,Delta,,stärkste Gehirnwelle im Sehzentrum
+Aufmerksamkeit,Trend über Video,fallend (Ermüdung?),,Steigung: -0.099
+Aufmerksamkeit,Hohe Aufmerksamkeit,22,%,Anteil der Zeit
+Aufmerksamkeit,Niedrige Aufmerksamkeit,11,%,Anteil der Zeit
+Baseline→Video,Alpha-Änderung,+76,%,steigt=weniger Fokus
+Baseline→Video,Beta-Änderung,+7,%,steigt=mehr Aktivität
+Baseline→Video,Statistik (p-Wert),0.000,,signifikant
+Elektroden-Kopplung,Beta-Korrelation,-0.05,r,kaumer Zusammenhang Sehen↔Denken
+Auffälligkeiten,Einzelereignisse,9,,markante EEG-Momente
+Auffälligkeiten,Persistente Phasen,0,,anhaltende Aktivitätsphasen
+BEWERTUNG,Gesamt-Score,53,/100,VERBESSERUNGSWÜRDIG
+BEWERTUNG,Kognitive Aktivierung,90,/100,"β/α=1.75 – hohe Aktivierung, Person ist geistig dabei"
+BEWERTUNG,Aufmerksamkeits-Stabilität,45,/100,Aufmerksamkeit fällt ab – mögliche Ermüdung/Langeweile
+BEWERTUNG,Reaktion auf Video-Start,40,/100,Alpha steigt (6%→11%) – Aufmerksamkeit lässt nach
+BEWERTUNG,Visuelle Aufmerksamkeitslenkung,45,/100,r=-0.05 – schwache Lenkung
+BEWERTUNG,Kognitive Verständlichkeit,45,/100,3 Überlastungsmomente – evtl. zu komplex
