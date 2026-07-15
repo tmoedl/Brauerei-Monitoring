@@ -1064,55 +1064,53 @@ const COMP_COLORS = [
 // ----------------------------------------------------------------
 // WallChart * Canvas-basiertes AR-Diagramm
 // ----------------------------------------------------------------
+// Feste interne Zeichen-Aufloesung (wie bei WallPanel3D/CW+CH) statt
+// dynamischer getBoundingClientRect()-Vermessung: Das Panel spielt beim
+// Oeffnen eine CSS-Transform-Animation (.wd-inner, "wd-in") ab, die
+// KEINEN ResizeObserver ausloest. Ein Fit waehrend dieser Animation
+// (oder bevor das Panel ueberhaupt sichtbar/final gelayoutet ist) fror
+// die Canvas auf eine falsche, zu kleine Aufloesung ein -> Achsenbe-
+// schriftungen wurden dann verzerrt/verstuemmelt dargestellt (z.B.
+// "8 Grad" statt "18.4 Grad"). Eine feste Aufloesung ist von jeglichem
+// Layout-/Animations-Timing unabhaengig und daher robust.
+const CHART_W = 780, CHART_H = 230;
+
 class WallChart {
     constructor(canvas) {
         this.canvas  = canvas;
         this.ctx     = canvas.getContext('2d');
-        this._dpr    = Math.max(1, window.devicePixelRatio || 1);
         this._data   = null;
         this._state  = 'idle';
         this._hoverX = null;
         this._geom   = null;
 
-        this._fit();
+        this.canvas.width  = CHART_W;
+        this.canvas.height = CHART_H;
+
         this._bindHover();
-        this._resizeObs = new ResizeObserver(() => { this._fit(); if (this._data) this._draw(); });
-        this._resizeObs.observe(canvas);
 
         this._tip = document.createElement('div');
         this._tip.className = 'chart-tooltip';
         document.body.appendChild(this._tip);
     }
 
-    destroy() { this._resizeObs?.disconnect(); this._tip?.remove(); }
-
-    _fit() {
-        const rect = this.canvas.getBoundingClientRect();
-        if (!rect.width) return;
-        this.canvas.width  = Math.round(rect.width  * this._dpr);
-        this.canvas.height = Math.round((rect.height || 230) * this._dpr);
-        this.ctx.setTransform(this._dpr, 0, 0, this._dpr, 0, 0);
-    }
+    destroy() { this._tip?.remove(); }
 
     showLoading() { this._state = 'loading'; this._drawMsg('Lade Verlauf ...'); }
     showError()   { this._state = 'error';   this._drawMsg('Laden fehlgeschlagen.'); }
 
     _drawMsg(msg) {
         const ctx = this.ctx;
-        const w = this.canvas.width / this._dpr, h = this.canvas.height / this._dpr;
+        const w = CHART_W, h = CHART_H;
         ctx.clearRect(0, 0, w, h);
         ctx.fillStyle = 'rgba(255,255,255,0.25)';
-        ctx.font = '13px "IBM Plex Sans",sans-serif';
+        ctx.font = '13px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(msg, w / 2, h / 2);
     }
 
     render(data) {
         this._state = 'ready'; this._data = data; this._compData = null;
-        // Panel kann beim ersten Render noch unsichtbar/ungemessen sein (0px) -
-        // ohne Neu-Messung bliebe die Canvas auf der Browser-Default-Groesse
-        // (300x150) haengen und die Achsen wuerden verzerrt/ueberlappend gezeichnet.
-        this._fit();
         this._draw();
     }
 
@@ -1120,7 +1118,6 @@ class WallChart {
         this._state     = 'ready';
         this._data      = null;
         this._compData  = seriesArray;  // [{label, ist, soll}]
-        this._fit();
         this._drawComparison();
     }
 
@@ -1128,13 +1125,13 @@ class WallChart {
         const series = this._compData;
         if (!series?.length) return;
         const ctx = this.ctx;
-        const w = this.canvas.width / this._dpr, h = this.canvas.height / this._dpr;
+        const w = CHART_W, h = CHART_H;
         ctx.clearRect(0, 0, w, h);
 
         const allPts = series.flatMap(s => [...s.ist, ...s.soll]);
         if (!allPts.length) { this._drawMsg('Keine Daten.'); return; }
 
-        const padL=42,padR=14,padT=14,padB=28;
+        const padL=68,padR=14,padT=14,padB=28;
         const innerW=w-padL-padR, innerH=h-padT-padB;
         const xs=allPts.map(p=>p[0]), ys=allPts.map(p=>p[1]);
         const xMin=Math.min(...xs), xMax=Math.max(...xs);
@@ -1146,7 +1143,7 @@ class WallChart {
         const yS=v=>padT+(1-(v-yMin)/(yMax-yMin||1))*innerH;
 
         // Gitter
-        ctx.lineWidth=1; ctx.font='10px "JetBrains Mono",monospace';
+        ctx.lineWidth=1; ctx.font='10px monospace';
         ticks.forEach(v=>{
             const y = yS(v);
             ctx.strokeStyle='rgba(255,255,255,0.07)';
@@ -1188,12 +1185,12 @@ class WallChart {
     _draw() {
         const { ist = [], soll = [], regul = [] } = this._data || {};
         const ctx = this.ctx;
-        const w = this.canvas.width / this._dpr, h = this.canvas.height / this._dpr;
+        const w = CHART_W, h = CHART_H;
         ctx.clearRect(0, 0, w, h);
 
         if (!ist.length && !soll.length) { this._drawMsg('Keine Daten.'); return; }
 
-        const padL = 42, padR = 14, padT = 14, padB = 28;
+        const padL = 68, padR = 14, padT = 14, padB = 28;
         const innerW = w - padL - padR, innerH = h - padT - padB;
 
         const all = ist.concat(soll);
@@ -1220,7 +1217,7 @@ class WallChart {
 
         // Gitter + Y-Achse
         ctx.lineWidth = 1;
-        ctx.font = '10px "JetBrains Mono",monospace';
+        ctx.font = '10px monospace';
         ticks.forEach(v => {
             const y = yS(v);
             ctx.strokeStyle = 'rgba(255,255,255,0.07)';
@@ -1290,7 +1287,11 @@ class WallChart {
         this.canvas.addEventListener('pointermove', e => {
             if (this._state !== 'ready' || !this._geom) return;
             const rect = this.canvas.getBoundingClientRect();
-            this._hoverX = e.clientX - rect.left;
+            if (!rect.width) return;
+            // Maus-Position von CSS-Pixeln in den festen Zeichen-Koordinatenraum
+            // (CHART_W/CHART_H) umrechnen, unabhaengig von der tatsaechlichen
+            // gerenderten Groesse.
+            this._hoverX = (e.clientX - rect.left) * (CHART_W / rect.width);
             this._draw();
             this._showTip(e.clientX, e.clientY);
         });
