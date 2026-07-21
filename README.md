@@ -122,20 +122,34 @@ Der Gedanke dahinter: bei einem Rundgang durch die Brauerei will man nicht erst 
 
 ## 6) EEG-Auswertung – Interpretation der Test-Session
 
-Als Teil der Studienarbeit wurde eine Testperson beim Betrachten des Brauprozess-Videos und der Visualisierung mit einem Zwei-Kanal-EEG aufgezeichnet (Frontal + Okzipital, biosignalsplux, 1000 Hz). Vollständiges Notebook inkl. Methodik: [`EEG/eeg_analysis_brewvis.ipynb`](EEG/eeg_analysis_brewvis.ipynb), der komplette PDF-Report liegt unter [`EEG/EEG_Report_BrewVis.pdf`](EEG/EEG_Report_BrewVis.pdf).
+Als Teil der Studienarbeit wurde eine Testperson (Niklas Schmitt) beim Bearbeiten typischer Nutzer-Aufgaben in der Anwendung mit einem Zwei-Kanal-EEG aufgezeichnet (Frontal + Okzipital, biosignalsplux, 1000 Hz). Das vollständige Testprotokoll (Ablauf, Aufgaben T1–T7, Einschränkungen) liegt unter [`EEG/Testprotokoll_NiklasSchmitt.md`](EEG/Testprotokoll_NiklasSchmitt.md), das Auswertungs-Notebook unter [`EEG/eeg_analysis_brewvis.ipynb`](EEG/eeg_analysis_brewvis.ipynb), der vollständige PDF-Report unter [`EEG/EEG_Report_BrewVis.pdf`](EEG/EEG_Report_BrewVis.pdf).
 
 **Kurz zusammengefasst** (Aufnahme: 8,8 Minuten, davon war eines von zwei Videos EEG-seitig abgedeckt):
 
 - Das Beta/Alpha-Verhältnis lag bei 1,75 – deutlich im aktivierten Bereich. Die Person war während der Session geistig grundsätzlich präsent, nicht eingenickt oder abgeschaltet.
 - Zwischen Baseline und Video steigt der Alpha-Anteil frontal um 76 % an (statistisch signifikant, p < 0.001). Das ist erstmal kein gutes Zeichen: mehr Alpha bedeutet tendenziell weniger Fokus, nicht mehr. Die Visualisierung hat die Aufmerksamkeit beim Start des Videos also eher nicht zusätzlich gebunden.
-- Der Aufmerksamkeits-Trend über die Videolänge fällt leicht ab (Steigung −0,099) – ein Hinweis auf nachlassendes Interesse oder Ermüdung gegen Ende, keine durchgehend steigende Spannungskurve.
-- Die Kopplung zwischen frontaler und okzipitaler Beta-Aktivität ist mit r = −0,05 praktisch nicht vorhanden. Das heißt, visuelle Reize in der Darstellung haben die kognitive Aufmerksamkeit nicht erkennbar mitgezogen – Sehen und Fokussieren laufen in dieser Messung eher unabhängig voneinander.
+- Der Aufmerksamkeits-Trend über die Session fällt leicht ab (Steigung −0,099) – ein Hinweis auf nachlassendes Interesse oder Ermüdung gegen Ende, keine durchgehend steigende Spannungskurve.
+- Die Kopplung zwischen frontaler und okzipitaler Beta-Aktivität ist mit r = −0,05 praktisch nicht vorhanden. Visuelle Reize in der Darstellung haben die kognitive Aufmerksamkeit also nicht erkennbar mitgezogen – Sehen und Fokussieren laufen in dieser Messung eher unabhängig voneinander.
 - 9 einzelne auffällige EEG-Momente wurden automatisch erkannt, darunter 3 Theta-Bursts, die im Notebook als mögliche Überlastungsmomente interpretiert werden (zu viel Informationsdichte in dem Moment).
-- Das im Notebook definierte Bewertungsschema kommt in Summe auf **53 von 100 Punkten** – eingestuft als „verbesserungswürdig", nicht als gescheitert, aber mit klarem Potenzial nach oben.
 
-**Wichtige Einschränkung:** Das Ganze basiert auf einer einzigen Testperson mit zwei Elektroden. Für eine echte wissenschaftliche Aussage bräuchte es deutlich mehr Probanden und ein volles EEG-Setup – die hier gezeigten Werte sind explorativ und als Werkzeug zur Verbesserung der eigenen Visualisierung zu verstehen, nicht als belastbare Studie. Trotzdem geben sie konkrete Ansatzpunkte: weniger Informationsdichte an den Stellen mit Theta-Bursts, und eventuell mehr Interaktivität gleich zu Beginn des Videos, um die Aufmerksamkeit besser zu binden.
+**Daraus abgeleitete Design-Empfehlungen:** an den Stellen mit Theta-Bursts die Informationsdichte reduzieren (z. B. weniger gleichzeitig sichtbare Kennzahlen im Detail-Panel), und beim Einstieg in einen neuen Bereich mehr Interaktivität anbieten, um die Aufmerksamkeit von Anfang an besser zu binden – der Alpha-Anstieg beim Wechsel deutet darauf hin, dass die Nutzer dort eher passiv zuschauen statt aktiv zu explorieren.
+
+**Wichtige Einschränkung:** Das Ganze basiert auf einer einzigen Testperson mit zwei Elektroden, und es wurde nur eine mündliche statt einer schriftlichen Einverständniserklärung eingeholt (siehe Testprotokoll). Für eine echte wissenschaftliche Aussage bräuchte es deutlich mehr Probanden, ein volles EEG-Setup und die formal korrekte Einverständniserklärung – die hier gezeigten Werte sind explorativ und als Werkzeug zur Verbesserung der eigenen Visualisierung zu verstehen, nicht als belastbare Studie.
 
 Rohdaten, Sync-Videos und alle Auswertungsskripte liegen unter [`EEG/`](EEG/), die generierten Grafiken/Reports unter [`EEG/output/`](EEG/output/).
+
+---
+
+## 7) Revisionen & Fazit
+
+Das ursprüngliche Konzept liegt unter [`Konzept/IV_Konzept.pdf`](Konzept/IV_Konzept.pdf) – Makro-/Mikro-Ansicht, Informationsarchitektur und die Grundidee der 3D/AR-Umsetzung sind in der finalen Anwendung im Kern so umgesetzt worden.
+
+Im Zuge von Tests und laufender Nutzung sind konkrete Fehler aufgefallen und behoben worden, unter anderem:
+
+- **Y-Achsen-Beschriftung im Overlay-Fenster:** Bei bestimmten Wertebereichen wurde die Achse links abgeschnitten und zeigte dadurch scheinbar wiederholt denselben Wert an, statt der tatsächlichen Temperaturskala. Ursache war ein zu schmal bemessener Rand für rechtsbündigen Text; behoben durch mehr Platz für die Beschriftung.
+- **3D-Balkendiagramm blieb nach dem Schließen eines Verlaufsfensters manchmal versteckt**, weil die Sichtbarkeits-Logik über mehrere Stellen im Code verteilt war und nicht jeder Pfad sie korrekt zurücksetzte. Auf eine einzige, zentrale Sichtbarkeits-Funktion umgestellt.
+
+**Fazit:** Die räumliche 3D/AR-Darstellung macht den Anlagenstatus schneller erfassbar als eine klassische Tabelle – das zeigt sich sowohl in der informellen Beobachtung während der Testaufgaben als auch daran, dass die Testperson die Übersichts- und Vergleichsaufgaben ohne Nachfragen lösen konnte. Die EEG-Aufzeichnung liefert allerdings auch ein ehrliches Gegengewicht: Die Aufmerksamkeit lässt über die Session leicht nach, und die Kopplung zwischen visueller Wahrnehmung und kognitivem Fokus ist schwächer als erhofft. Für eine Weiterentwicklung wäre daher weniger Informationsdichte in den Detail-Panels und mehr aktive Interaktion beim Einstieg in einen neuen Bereich der naheliegendste nächste Schritt – und natürlich ein Test mit mehr als einer Person.
 
 ---
 
@@ -162,10 +176,11 @@ Rohdaten, Sync-Videos und alle Auswertungsskripte liegen unter [`EEG/`](EEG/), d
 │           ├── dataService.js   Fetch-/Polling-Layer
 │           └── config.js        Frontend-Konstanten
 ├── EEG/                     Nutzertest-Auswertung (EEG, Studienarbeit)
-│   ├── eeg_analysis_brewvis.ipynb  Auswertungs-Notebook
-│   ├── EEG_Report_BrewVis.pdf      PDF-Report (Abgabe-Dokument)
-│   ├── data/                       EEG-Rohdaten + Aufnahme-Videos
-│   └── output/                     Generierte Grafiken/Overlay-Videos/Tabellen
+│   ├── eeg_analysis_brewvis.ipynb    Auswertungs-Notebook
+│   ├── EEG_Report_BrewVis.pdf        PDF-Report (Abgabe-Dokument)
+│   ├── Testprotokoll_NiklasSchmitt.md Testprotokoll (Ablauf, Aufgaben, Consent)
+│   ├── data/                         EEG-Rohdaten + Aufnahme-Videos
+│   └── output/                       Generierte Grafiken/Overlay-Videos/Tabellen
 ├── Konzept/                 Konzept-Dokument der Studienarbeit (PDF)
 └── docs/screenshots/        Screenshots für dieses README
 ```
@@ -173,7 +188,7 @@ Rohdaten, Sync-Videos und alle Auswertungsskripte liegen unter [`EEG/`](EEG/), d
 ## Lokale Installation
 
 ```bash
-git clone https://github.com/tmoedl/iv.git
+git clone https://github.com/tmoedl/Brauerei-Monitoring.git
 cd iv/app
 cp config.example.php config.php
 # DB-Zugang und Passwort in config.php eintragen
